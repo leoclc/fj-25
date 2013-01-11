@@ -6,6 +6,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.persistence.EntityManager;
 
+import br.com.caelum.financas.dao.MovimentacaoDAO;
+import br.com.caelum.financas.infra.JPAUtil;
 import br.com.caelum.financas.modelo.Movimentacao;
 
 @ManagedBean
@@ -19,9 +21,11 @@ public class MovimentacoesPorTitularBean {
 	public void setEm(EntityManager em) {
 		this.em = em;
 	}
-
+ 
 	public void lista() {
-		System.out.println("Buscando as movimentacoes pelo titular da conta");
+		EntityManager entityManager = new JPAUtil().getEntityManager();
+		MovimentacaoDAO dao = new MovimentacaoDAO(entityManager);
+	movimentacoes =	dao.buscaTodasMovimentacoesDaConta(titular);
 	}
 
 	public List<Movimentacao> getMovimentacoes() {

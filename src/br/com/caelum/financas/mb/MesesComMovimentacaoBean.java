@@ -1,15 +1,20 @@
 package br.com.caelum.financas.mb;
 
+import java.util.List;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.persistence.EntityManager;
 
+import br.com.caelum.financas.dao.MovimentacaoDAO;
+import br.com.caelum.financas.infra.JPAUtil;
 import br.com.caelum.financas.modelo.Conta;
 import br.com.caelum.financas.modelo.TipoMovimentacao;
+import br.com.caelum.financas.modelo.ValorPorMesEAno;
 
 @ManagedBean
 public class MesesComMovimentacaoBean {
-
+	private List<ValorPorMesEAno> valoresPorMesEAno;
 	private final Conta conta = new Conta();
 
 	private TipoMovimentacao tipoMovimentacao;
@@ -21,9 +26,18 @@ public class MesesComMovimentacaoBean {
 		this.em = em;
 	}
 
+	public List<ValorPorMesEAno> getValoresPorMesEAno() {
+		return valoresPorMesEAno;
+	}
+
+	public void setValoresPorMesEAno(List<ValorPorMesEAno> valoresPorMesEAno) {
+		this.valoresPorMesEAno = valoresPorMesEAno;
+	}
+
 	public void lista() {
-		System.out
-				.println("Listando as contas pelos valores movimentados no mês");
+		EntityManager entityManager = new JPAUtil().getEntityManager();
+		MovimentacaoDAO dao = new MovimentacaoDAO(entityManager);
+		valoresPorMesEAno = dao.listaMesesComMovimentacoes(conta, tipoMovimentacao);
 	}
 
 	public TipoMovimentacao getTipoMovimentacao() {
