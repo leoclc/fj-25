@@ -8,9 +8,11 @@ import javax.persistence.EntityManager;
 
 import br.com.caelum.financas.dao.ContaDAO;
 import br.com.caelum.financas.dao.MovimentacaoDAO;
+import br.com.caelum.financas.dao.TagDAO;
 import br.com.caelum.financas.infra.JPAUtil;
 import br.com.caelum.financas.modelo.Conta;
 import br.com.caelum.financas.modelo.Movimentacao;
+import br.com.caelum.financas.modelo.Tag;
 import br.com.caelum.financas.modelo.TipoMovimentacao;
 
 @ManagedBean
@@ -27,6 +29,16 @@ public class MovimentacoesBean {
 	// this.em = em;
 	// }
 
+	private void gravaEAssociaAsTags(EntityManager em){
+		String[] nomesDasTags = this.tags.split(" ");
+		TagDAO tagDAO = new TagDAO(em);
+		for(String nome : nomesDasTags){
+			Tag tag = tagDAO.adicionaOuBuscaTagComNome(nome);
+			movimentacao.getTags().add(tag);
+		}
+	}
+	
+	
 	public void grava() {
 		EntityManager entityManager = new JPAUtil().getEntityManager();
 		MovimentacaoDAO dao = new MovimentacaoDAO(entityManager);
@@ -34,6 +46,7 @@ public class MovimentacoesBean {
 		entityManager.getTransaction().begin();
 		Conta contaRelacionada = contaDAO.busca(contaId);
 		movimentacao.setConta(contaRelacionada);
+		gravaEAssociaAsTags(entityManager);
 		dao.adiciona(movimentacao);
 		entityManager.getTransaction().commit();
 		entityManager.close();
@@ -53,7 +66,9 @@ public class MovimentacoesBean {
 	}
 
 	public List<Movimentacao> getMovimentacoes() {
-		System.out.println("Listando as movimentacoes");
+		EntityManager entityManager = new JPAUtil().getEntityManager();
+		MovimentacaoDAO dao = new MovimentacaoDAO(entityManager);
+		movimentacoes = dao.lista();
 		return movimentacoes;
 	}
 
