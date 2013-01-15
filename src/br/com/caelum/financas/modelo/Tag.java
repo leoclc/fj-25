@@ -12,7 +12,10 @@ public class Tag {
 	private int id;
 	private String nome;
 
-	
+	@Override
+	public String toString() {
+		return nome;
+	}
 	
 	public String getNome() {
 		return nome;

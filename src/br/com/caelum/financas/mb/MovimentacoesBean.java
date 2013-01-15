@@ -4,12 +4,12 @@ import java.util.Calendar;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.persistence.EntityManager;
 
 import br.com.caelum.financas.dao.ContaDAO;
 import br.com.caelum.financas.dao.MovimentacaoDAO;
 import br.com.caelum.financas.dao.TagDAO;
-import br.com.caelum.financas.infra.JPAUtil;
 import br.com.caelum.financas.modelo.Conta;
 import br.com.caelum.financas.modelo.Movimentacao;
 import br.com.caelum.financas.modelo.Tag;
@@ -22,51 +22,41 @@ public class MovimentacoesBean {
 	private Integer contaId;
 	private String tags;
 
-	// @ManagedProperty(name="em",value="#{requestScope.em}")
-	// private EntityManager em;
+	@ManagedProperty(name = "em", value = "#{requestScope.em}")
+	private EntityManager entityManager;
 
-	// public void setEm(EntityManager em) {
-	// this.em = em;
-	// }
+	public void setEm(EntityManager em) {
+		this.entityManager = em;
+	}
 
-	private void gravaEAssociaAsTags(EntityManager em){
+	private void gravaEAssociaAsTags(EntityManager em) {
 		String[] nomesDasTags = this.tags.split(" ");
 		TagDAO tagDAO = new TagDAO(em);
-		for(String nome : nomesDasTags){
+		for (String nome : nomesDasTags) {
 			Tag tag = tagDAO.adicionaOuBuscaTagComNome(nome);
 			movimentacao.getTags().add(tag);
 		}
 	}
-	
-	
+
 	public void grava() {
-		EntityManager entityManager = new JPAUtil().getEntityManager();
 		MovimentacaoDAO dao = new MovimentacaoDAO(entityManager);
 		ContaDAO contaDAO = new ContaDAO(entityManager);
-		entityManager.getTransaction().begin();
 		Conta contaRelacionada = contaDAO.busca(contaId);
 		movimentacao.setConta(contaRelacionada);
 		gravaEAssociaAsTags(entityManager);
 		dao.adiciona(movimentacao);
-		entityManager.getTransaction().commit();
-		entityManager.close();
 		limpaFormularioDoJSF();
-		
+
 	}
 
 	public void remove() {
-		EntityManager entityManager = new JPAUtil().getEntityManager();
 		MovimentacaoDAO dao = new MovimentacaoDAO(entityManager);
-		entityManager.getTransaction().begin();
 		Movimentacao busca = dao.busca(movimentacao.getId());
 		dao.remove(busca);
-		entityManager.getTransaction().commit();
-		entityManager.close();
 		limpaFormularioDoJSF();
 	}
 
 	public List<Movimentacao> getMovimentacoes() {
-		EntityManager entityManager = new JPAUtil().getEntityManager();
 		MovimentacaoDAO dao = new MovimentacaoDAO(entityManager);
 		movimentacoes = dao.lista();
 		return movimentacoes;
