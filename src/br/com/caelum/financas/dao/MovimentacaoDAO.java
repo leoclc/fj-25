@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 
 import br.com.caelum.financas.infra.JPAUtil;
 import br.com.caelum.financas.modelo.Conta;
@@ -23,6 +25,13 @@ public class MovimentacaoDAO {
 		dao = new DAO<Movimentacao>(em,Movimentacao.class);			
 	}
 
+	public List<Movimentacao> todasComCriteria(){
+		CriteriaBuilder builder = em.getCriteriaBuilder();
+		CriteriaQuery<Movimentacao> criteria = builder.createQuery(Movimentacao.class);
+		criteria.from(Movimentacao.class);
+		return em.createQuery(criteria).getResultList();
+	}
+	
 	public List<ValorPorMesEAno> listaMesesComMovimentacoes(Conta c, TipoMovimentacao tipo){
 	EntityManager entityManager = new JPAUtil().getEntityManager();
 	String jpql = "select new br.com.caelum.financas.modelo.ValorPorMesEAno(month(m.data),year(m.data),sum(m.valor)) from Movimentacao m where m.conta = :conta and m.tipoMovimentacao = :tipo group by year(m.data),month(m.data) order by sum(m.valor) desc";
