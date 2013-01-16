@@ -9,6 +9,8 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import br.com.caelum.financas.validator.PossuiNumeroEAgencia;
+@PossuiNumeroEAgencia
 @Entity
 public class Conta {
 
