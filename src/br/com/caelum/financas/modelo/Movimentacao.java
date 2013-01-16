@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.DecimalMin;
 
 @Entity
 public class Movimentacao {
@@ -20,6 +21,7 @@ public class Movimentacao {
 	private Integer id;
 	private String descricao;
 	private Calendar data;
+	@DecimalMin(value = "0.01")
 	private BigDecimal valor;
 	@ManyToMany
 	private List<Tag> tags = new ArrayList<Tag>();

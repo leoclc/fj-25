@@ -6,7 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 public class Conta {
@@ -14,10 +15,9 @@ public class Conta {
 	@Id
 	@GeneratedValue
 	private Integer id;
-	
 	@OneToMany(mappedBy="conta")
 	private List<Movimentacao> movimentacoes;
-	@NotNull
+	@NotBlank
 	private String titular;
 	private String agencia;
 	private String numero;
