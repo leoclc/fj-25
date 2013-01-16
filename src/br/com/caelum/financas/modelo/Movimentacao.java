@@ -14,7 +14,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.DecimalMin;
 
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
+
 @Entity
+@Indexed
 public class Movimentacao {
 	@Id
 	@GeneratedValue
@@ -24,6 +28,7 @@ public class Movimentacao {
 	@DecimalMin(value = "0.01")
 	private BigDecimal valor;
 	@ManyToMany
+	@IndexedEmbedded
 	private List<Tag> tags = new ArrayList<Tag>();
 	@ManyToOne
 	private Conta conta;

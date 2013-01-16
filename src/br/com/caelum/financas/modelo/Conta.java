@@ -7,11 +7,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.hibernate.search.annotations.Indexed;
 import org.hibernate.validator.constraints.NotBlank;
 
 import br.com.caelum.financas.validator.PossuiNumeroEAgencia;
 @PossuiNumeroEAgencia
 @Entity
+@Indexed
 public class Conta {
 
 	@Id

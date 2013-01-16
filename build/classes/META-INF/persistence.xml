@@ -10,6 +10,9 @@
 		<class>br.com.caelum.financas.modelo.Movimentacao</class>
 		
 		<properties>
+			<property name="hibernate.search.default.directory_provider" value="org.hibernate.search.store.FSDirectoryProvider"/>
+			<property name="hibernate.search.default.indexBase" value="/home/jpa3146/workspace/projeto-fj25-web/WebContent/WEB-INF/lucene/indexes"/>
+			<property name="hibernate.search.analyzer" value="org.apache.lucene.analysis.br.BrazilianAnalyzer"/>
 			<property name="hibernate.connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider"/>
 			<property name="hibernate.c3p0.min_size" value="5"/>
 			<property name="hibernate.c3p0.max_size" value="20"/>
