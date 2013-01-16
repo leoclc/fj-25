@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Conta {
@@ -16,7 +17,7 @@ public class Conta {
 	
 	@OneToMany(mappedBy="conta")
 	private List<Movimentacao> movimentacoes;
-	
+	@NotNull
 	private String titular;
 	private String agencia;
 	private String numero;
