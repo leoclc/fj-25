@@ -24,6 +24,7 @@ public class Conta {
 	@GeneratedValue
 	private Integer id;
 	@OneToMany(mappedBy = "conta")
+	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private List<Movimentacao> movimentacoes;
 	@NotBlank
 	private String titular;
