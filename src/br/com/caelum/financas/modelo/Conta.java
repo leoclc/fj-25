@@ -7,25 +7,30 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.validator.constraints.NotBlank;
 
 import br.com.caelum.financas.validator.PossuiNumeroEAgencia;
+
 @PossuiNumeroEAgencia
 @Entity
 @Indexed
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Conta {
 
 	@Id
 	@GeneratedValue
 	private Integer id;
-	@OneToMany(mappedBy="conta")
+	@OneToMany(mappedBy = "conta")
 	private List<Movimentacao> movimentacoes;
 	@NotBlank
 	private String titular;
 	private String agencia;
 	private String numero;
 	private String banco;
+
 	public Integer getId() {
 		return id;
 	}
@@ -73,6 +78,5 @@ public class Conta {
 	public void setMovimentacoes(List<Movimentacao> movimentacoes) {
 		this.movimentacoes = movimentacoes;
 	}
-
 
 }
