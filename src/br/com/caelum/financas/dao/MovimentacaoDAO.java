@@ -13,6 +13,14 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.lucene.analysis.br.BrazilianAnalyzer;
+import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.util.Version;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.FullTextQuery;
+import org.hibernate.search.jpa.Search;
+
 import br.com.caelum.financas.infra.JPAUtil;
 import br.com.caelum.financas.modelo.Conta;
 import br.com.caelum.financas.modelo.Movimentacao;
@@ -27,6 +35,18 @@ public class MovimentacaoDAO {
 	public MovimentacaoDAO(EntityManager em) {
 		this.em = em;
 		dao = new DAO<Movimentacao>(em, Movimentacao.class);
+	}
+	
+	public List<Movimentacao> buscaMovimentacoesBaseadoNasTags(String texto){
+		FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
+		QueryParser parser = new QueryParser(Version.LUCENE_29,"tags.nome",new BrazilianAnalyzer(Version.LUCENE_29));
+		try{
+			org.apache.lucene.search.Query query = parser.parse(texto);
+			FullTextQuery textQuery = fullTextEntityManager.createFullTextQuery(query, Movimentacao.class);
+			return textQuery.getResultList();
+		} catch(ParseException e) {
+			throw new IllegalArgumentException(e);
+		}
 	}
 
 	public List<Movimentacao> pesquisa(Conta conta,
