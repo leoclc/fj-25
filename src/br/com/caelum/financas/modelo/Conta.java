@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Version;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -28,6 +29,8 @@ public class Conta {
 	private List<Movimentacao> movimentacoes;
 	@NotBlank
 	private String titular;
+	@Version
+	private Integer versao;
 	private String agencia;
 	private String numero;
 	private String banco;
@@ -78,6 +81,14 @@ public class Conta {
 
 	public void setMovimentacoes(List<Movimentacao> movimentacoes) {
 		this.movimentacoes = movimentacoes;
+	}
+
+	public Integer getVersao() {
+		return versao;
+	}
+
+	public void setVersao(Integer versao) {
+		this.versao = versao;
 	}
 
 }
