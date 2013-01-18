@@ -37,6 +37,17 @@ public class MovimentacaoDAO {
 		dao = new DAO<Movimentacao>(em, Movimentacao.class);
 	}
 	
+	public List<Movimentacao> listaPorValorETipo(BigDecimal valor, TipoMovimentacao tipo){
+		String jpql = "select m from Movimentacao m where m.valor<=:valor and m.tipoMovimentacao=:tipo";
+		Query query = this.em.createQuery(jpql);
+		query.setParameter("valor", valor);
+		query.setParameter("tipo", tipo);
+		query.setHint("org.hibernate.cacheable", "true");
+		
+		return query.getResultList();
+		
+	}
+	
 	public List<Movimentacao> buscaMovimentacoesBaseadoNasTags(String texto){
 		FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
 		QueryParser parser = new QueryParser(Version.LUCENE_29,"tags.nome",new BrazilianAnalyzer(Version.LUCENE_29));

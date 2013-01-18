@@ -7,6 +7,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.persistence.EntityManager;
 
+import br.com.caelum.financas.dao.MovimentacaoDAO;
+import br.com.caelum.financas.infra.JPAUtil;
 import br.com.caelum.financas.modelo.Movimentacao;
 import br.com.caelum.financas.modelo.TipoMovimentacao;
 
@@ -23,7 +25,8 @@ public class MovimentacoesPorValorETipoBean {
 	}
 
 	public void lista() {
-		System.out.println("Buscando movimentacoes por valor e tipo");
+		 MovimentacaoDAO dao = new MovimentacaoDAO(new JPAUtil().getEntityManager());
+         movimentacoes = dao.listaPorValorETipo(valor, tipoMovimentacao);
 	}
 
 	public BigDecimal getValor() {
